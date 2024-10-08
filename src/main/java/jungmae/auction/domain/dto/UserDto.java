@@ -1,6 +1,7 @@
 package jungmae.auction.domain.dto;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
@@ -13,6 +14,7 @@ public class UserDto {
     private String role;
 
     private String provider;
+
     private Timestamp createDate;
 
 }
