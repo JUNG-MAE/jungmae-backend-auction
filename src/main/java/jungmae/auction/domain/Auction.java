@@ -34,4 +34,5 @@ public class Auction {
     private String winningUserComment;
 
 
+
 }
