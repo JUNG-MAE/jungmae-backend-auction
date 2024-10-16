@@ -1,16 +1,16 @@
 package jungmae.auction.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jungmae.auction.domain.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Array;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,11 +27,17 @@ public class Auction {
     private String description;
     private long quantity;
     private String startPrice;
-    private Timestamp createDate;
-    private Timestamp endDate;
+    private String createDate;
+    private String endDate;
     private long resisteredUserId;
     private long winningUserId;
     private String winningUserComment;
+    private String closedAuction;
 
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images;
 
+    public void updateClosedAuction(String str) {
+        closedAuction = str;
+    }
 }
