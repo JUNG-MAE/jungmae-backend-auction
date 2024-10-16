@@ -20,3 +20,12 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+
+naver:
+  cloud:
+    end-point: https://kr.object.ncloudstorage.com
+    access-key:
+    secret-key:
+    bucket-name: contest59
+    folder-name: auciton/
+    region: kr-standard

@@ -2,24 +2,26 @@ package jungmae.auction.domain.dto;
 
 import jungmae.auction.domain.Auction;
 import lombok.Data;
-
-import java.sql.Timestamp;
+import lombok.NoArgsConstructor;
 
 @Data
-public class AuctionDto {
+@NoArgsConstructor
+public class AuctionByteImageDto {
 
     private String title;
     private String name;
     private String description;
     private long quantity;
     private String startPrice;
-    private Timestamp createDate;
-    private Timestamp endDate;
+    private String createDate;
+    private String endDate;
     private long resisteredUserId;
     private long winningUserId;
     private String winningUserComment;
+    private String closedAuction;
+    private byte[][] images;
 
-    public AuctionDto(Auction auction) {
+    public AuctionByteImageDto(Auction auction) {
         this.title = auction.getTitle();
         this.name = auction.getName();
         this.description = auction.getDescription();
@@ -30,5 +32,6 @@ public class AuctionDto {
         this.resisteredUserId = auction.getResisteredUserId();
         this.winningUserId = auction.getWinningUserId();
         this.winningUserComment = auction.getWinningUserComment();
+        this.closedAuction = auction.getClosedAuction();
     }
 }
