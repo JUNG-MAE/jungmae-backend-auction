@@ -6,7 +6,9 @@ import lombok.Data;
 @Data
 public class ImageDto {
 
-    String imageUrl;
+    private Long id;
+
+    private String imageUrl;
 
     public ImageDto(Image image) {
         this.imageUrl = image.getImageUrl();

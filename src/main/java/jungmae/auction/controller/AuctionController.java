@@ -112,4 +112,28 @@ public class AuctionController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }
+
+    // 진행중인 경매 리스트 조회
+    @GetMapping("/auction/list/open")
+    public ResponseEntity<?> findAllOpenAuction() {
+        try {
+            List<AuctionListDto> auctions = auctionService.findAllOpenAuctions();
+            return new ResponseEntity<>(auctions, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("경매 리스트 조회 오류");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // 종료된 경매 리스트 조회
+    @GetMapping("/auction/list/closed")
+    public ResponseEntity<?> findAllClosedAuction() {
+        try {
+            List<AuctionListDto> auctions = auctionService.findAllClosedAuctions();
+            return new ResponseEntity<>(auctions, HttpStatus.OK);
+        } catch (Exception e) {
+            System.out.println("경매 리스트 조회 오류");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

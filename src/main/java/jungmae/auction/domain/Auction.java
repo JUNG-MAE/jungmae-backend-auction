@@ -21,7 +21,7 @@ public class Auction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 생성 디비에 위임 -> auto increment
-    private long id;
+    private Long id;
     private String title;
     private String name;
     private String description;

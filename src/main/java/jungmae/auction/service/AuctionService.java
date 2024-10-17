@@ -1,16 +1,15 @@
 package jungmae.auction.service;
 
 import jungmae.auction.domain.Auction;
-import jungmae.auction.domain.dto.AuctionByteImageDto;
-import jungmae.auction.domain.dto.AuctionDetailDto;
-import jungmae.auction.domain.dto.AuctionImageUrlDto;
-import jungmae.auction.domain.dto.AuctionNonImageDto;
+import jungmae.auction.domain.dto.*;
 import jungmae.auction.repository.AuctionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,10 +45,29 @@ public class AuctionService {
         return new AuctionDetailDto(auction);
     }
 
+    // 경매 마감 처리
     public AuctionDetailDto closeUpdateAuction(Long id) {
         Auction auction = auctionRepository.findById(id).orElseThrow(()-> new NoSuchElementException("해당 경매 정보가 존재하지 않거나 id값이 잘못되었습니다.."));
         auction.updateClosedAuction("YES");
         Auction modifyAuction = auctionRepository.save(auction);
         return new AuctionDetailDto(modifyAuction);
+    }
+
+    // 진행중인 경매 리스트 조회
+    public List<AuctionListDto> findAllOpenAuctions() {
+        List<Auction> auctions = auctionRepository.findByClosedAuction("NO");
+
+        return auctions.stream()
+                .map(AuctionListDto::new)
+                .collect(Collectors.toList());
+    }
+
+    // 종료된 경매 리스트 조회
+    public List<AuctionListDto> findAllClosedAuctions() {
+        List<Auction> auctions = auctionRepository.findByClosedAuction("YES");
+
+        return auctions.stream()
+                .map(AuctionListDto::new)
+                .collect(Collectors.toList());
     }
 }
