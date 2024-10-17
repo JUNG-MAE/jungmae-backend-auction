@@ -46,10 +46,10 @@ public class AuctionService {
         return new AuctionDetailDto(auction);
     }
 
-    public AuctionByteImageDto closeUpdateAuction(Long id) {
-        Auction auction = auctionRepository.findById(id).orElseThrow(()-> new NoSuchElementException("경매 정보가 존재하지 않습니다."));
+    public AuctionDetailDto closeUpdateAuction(Long id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow(()-> new NoSuchElementException("해당 경매 정보가 존재하지 않거나 id값이 잘못되었습니다.."));
         auction.updateClosedAuction("YES");
-        auctionRepository.save(auction);
-        return new AuctionByteImageDto(auction);
+        Auction modifyAuction = auctionRepository.save(auction);
+        return new AuctionDetailDto(modifyAuction);
     }
 }

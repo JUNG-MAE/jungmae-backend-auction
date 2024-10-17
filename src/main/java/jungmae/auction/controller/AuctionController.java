@@ -3,6 +3,7 @@ package jungmae.auction.controller;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jungmae.auction.domain.Auction;
 import jungmae.auction.domain.dto.*;
 import jungmae.auction.service.AuctionService;
 import jungmae.auction.service.ImageService;
@@ -95,13 +96,17 @@ public class AuctionController {
         }
     }
 
+
     // 스케줄링? 시간 타이머를 사용? 해결법 모색해봐야 할 것 같다.
-    @PostMapping("/auction/close/{id}")
+    // -> 프론트 측에서 타이머를 통해 시간이 되면 신호를 주기로 합의함.
+
+    // 경매 시간 마감 -> Auction 필드 closedAuction을 YES로 변경.
+    @PatchMapping("/auction/close/{id}")
     public ResponseEntity<?> closeAuction(@PathVariable Long id) {
 
         try {
-            AuctionByteImageDto auctionDto = auctionService.closeUpdateAuction(id);
-            return new ResponseEntity<>("해당 경매 종료", HttpStatus.OK);
+            AuctionDetailDto auctionDetailDto = auctionService.closeUpdateAuction(id);
+            return new ResponseEntity<>(auctionDetailDto, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("id값이 유효하지 않음");
             return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);

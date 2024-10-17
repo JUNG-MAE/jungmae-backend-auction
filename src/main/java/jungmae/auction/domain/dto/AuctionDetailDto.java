@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 @Data
 public class AuctionDetailDto {
 
+    private Long id;
     private String title;
     private String name;
     private String description;
@@ -24,6 +25,7 @@ public class AuctionDetailDto {
     private List<ImageDto> images;
 
     public AuctionDetailDto(Auction auction) {
+        this.id = auction.getId();
         this.title = auction.getTitle();
         this.name = auction.getName();
         this.description = auction.getDescription();
