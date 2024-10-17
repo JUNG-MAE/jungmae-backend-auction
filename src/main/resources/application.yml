@@ -24,8 +24,8 @@ spring:
 naver:
   cloud:
     end-point: https://kr.object.ncloudstorage.com
-    access-key:
-    secret-key:
+    access-key: ncp_iam_BPASKR4WEYRJj8XYvH2v
+    secret-key: ncp_iam_BPKSKRHte3xuxUlKxisE2GB74ueSFNLplf
     bucket-name: contest59
     folder-name: auciton/
     region: kr-standard
