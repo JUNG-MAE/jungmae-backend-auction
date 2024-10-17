@@ -2,6 +2,7 @@ package jungmae.auction.service;
 
 import jungmae.auction.domain.Auction;
 import jungmae.auction.domain.dto.AuctionByteImageDto;
+import jungmae.auction.domain.dto.AuctionDetailDto;
 import jungmae.auction.domain.dto.AuctionImageUrlDto;
 import jungmae.auction.domain.dto.AuctionNonImageDto;
 import jungmae.auction.repository.AuctionRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,15 +40,14 @@ public class AuctionService {
         return new AuctionNonImageDto(savedAuction);
     }
 
-    public AuctionByteImageDto findAuction(Long id) {
+    public AuctionDetailDto findAuction(Long id) {
 
-        Auction auction = auctionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 경매 정보가 존재하지 않거나 id값이 잘못되었습니다.."));
-        AuctionByteImageDto auctionDto = new AuctionByteImageDto(auction);
-        return auctionDto;
+        Auction auction = auctionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("해당 경매 정보가 존재하지 않거나 id값이 잘못되었습니다.."));
+        return new AuctionDetailDto(auction);
     }
 
     public AuctionByteImageDto closeUpdateAuction(Long id) {
-        Auction auction = auctionRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("경매 정보가 존재하지 않습니다."));
+        Auction auction = auctionRepository.findById(id).orElseThrow(()-> new NoSuchElementException("경매 정보가 존재하지 않습니다."));
         auction.updateClosedAuction("YES");
         auctionRepository.save(auction);
         return new AuctionByteImageDto(auction);

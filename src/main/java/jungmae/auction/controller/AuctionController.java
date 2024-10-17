@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuctionController {
 
@@ -27,7 +28,8 @@ public class AuctionController {
     private final NaverCloudS3Service naverCloudS3Service;
     private final ImageService imageService;
 
-    @GetMapping("/api/image")
+    // 이미지 저장 경로를 사용해 image를 byte[]로 변환
+    @GetMapping("/image")
     public ResponseEntity<?> transImageToByte(@RequestBody ImagePathDto imagePathDto) {
 
         ImageByteDto byteImageDto = null;
@@ -49,7 +51,8 @@ public class AuctionController {
 
     }
 
-    @PostMapping("/api/auction")
+    // 경매 등록 및 경매 물품 사진 NCP에 업로드 후 저장 URL을 Image 디비에 저장
+    @PostMapping("/auction")
     public ResponseEntity<?> createAuction(@RequestBody AuctionByteImageDto auctionByteImageDto) {
         System.out.println("경매 생성 컨트롤러 진입");
         List<String> urls = new ArrayList<>();
@@ -78,20 +81,22 @@ public class AuctionController {
 
     }
 
-    @GetMapping("api/auction/{id}")
+    // id로 경매 조회
+    @GetMapping("/auction/{id}")
     public ResponseEntity<?> findAuction(@PathVariable Long id) {
 
+        System.out.println(id + " 번 경매의 자세한 데이터를 얻기위한 호출");
         try {
-            AuctionByteImageDto auctionDto = auctionService.findAuction(id);
-            return new ResponseEntity<>(auctionDto, HttpStatus.OK);
+            AuctionDetailDto auctionDetailDto = auctionService.findAuction(id);
+            return new ResponseEntity<>(auctionDetailDto, HttpStatus.OK);
         } catch (Exception e) {
             System.out.println("id값이 유효하지 않거나 해당 경매 정보가 없습니다.");
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("실패!", HttpStatus.UNAUTHORIZED);
         }
     }
 
     // 스케줄링? 시간 타이머를 사용? 해결법 모색해봐야 할 것 같다.
-    @PostMapping("api/auction/{id}/close")
+    @PostMapping("/auction/close/{id}")
     public ResponseEntity<?> closeAuction(@PathVariable Long id) {
 
         try {
