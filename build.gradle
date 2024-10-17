@@ -34,6 +34,12 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+bootJar{
+	archivesBaseName = 'auction'
+	archiveFileName = 'jungmae-auction.jar'
+	archiveVersion = "0.0.1"
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
