@@ -35,8 +35,8 @@ dependencies {
 }
 
 bootJar{
-	archivesBaseName = 'auction'
-	archiveFileName = 'jungmae-auction.jar'
+	archivesBaseName = 'jung-mae-auction'
+	archiveFileName = 'jung-mae-auction.jar'
 	archiveVersion = "0.0.1"
 }
 
