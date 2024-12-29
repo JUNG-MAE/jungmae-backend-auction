@@ -17,8 +17,6 @@ public class AuctionService {
 
     private final AuctionRepository auctionRepository;
 
-
-
     // 경매 등록 데이터 저장
     public AuctionNonImageDto createAuction(AuctionByteImageDto auctionByteImageDto) {
 

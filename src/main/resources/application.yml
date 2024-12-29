@@ -10,9 +10,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql-service:3306/jungmae-chat
-    username: root
-    password: 1234
+    url: jdbc:mysql://${MYSQL_URL}:3306/jungmae-chat
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
 
   jpa:
     hibernate:
@@ -21,11 +21,21 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
 
-naver:
-  cloud:
-    end-point: https://kr.object.ncloudstorage.com
-    access-key: ncp_iam_BPASKR4WEYRJj8XYvH2v
-    secret-key: ncp_iam_BPKSKRHte3xuxUlKxisE2GB74ueSFNLplf
-    bucket-name: contest59
-    folder-name: auciton/
-    region: kr-standard
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+cloud:
+  aws:
+    s3:
+      bucket: jungmae
+      endpoint: https://s3.ap-northeast-2.amazonaws.com
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${ACCESS_KEY}
+      secret-key: ${SECRET_KEY}
