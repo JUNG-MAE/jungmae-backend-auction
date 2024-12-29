@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jungmae.auction.domain.Auction;
 import jungmae.auction.domain.dto.*;
 import jungmae.auction.service.AuctionService;
+import jungmae.auction.service.AwsS3Service;
 import jungmae.auction.service.ImageService;
-import jungmae.auction.service.NaverCloudS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +26,11 @@ import java.util.List;
 public class AuctionController {
 
     private final AuctionService auctionService;
-    private final NaverCloudS3Service naverCloudS3Service;
+    private final AwsS3Service awsS3Service;
     private final ImageService imageService;
 
     // 이미지 저장 경로를 사용해 image를 byte[]로 변환
+    // 백엔드 서버에서 image를 byte화 하여 테스트 하기위해 구현.
     @GetMapping("/image")
     public ResponseEntity<?> transImageToByte(@RequestBody ImagePathDto imagePathDto) {
 
@@ -48,11 +49,10 @@ public class AuctionController {
             e1.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-
     }
 
     // 경매 등록 및 경매 물품 사진 NCP에 업로드 후 저장 URL을 Image 디비에 저장
+    // byte화 된 이미지 데이터가 Dto에 함께 들어온다.
     @PostMapping("/auction")
     public ResponseEntity<?> createAuction(@RequestBody AuctionByteImageDto auctionByteImageDto) {
         System.out.println("경매 생성 컨트롤러 진입");
@@ -68,8 +68,10 @@ public class AuctionController {
         try {
             // 경매 등록 데이터를 경매 DB에 저장.
             AuctionNonImageDto auctionNonImageDto = auctionService.createAuction(auctionByteImageDto);
+            // 경매 Id값 + 물품이름으로 S3에 저장할 폴더이름 설정.
+            String folderName = auctionNonImageDto.getId().toString()+"_"+auctionNonImageDto.getName();
             // NCP에 이미지 업로드 후 이미지의 저정 주소 URL값들을 받아옴.
-            urls = naverCloudS3Service.uploadImages(auctionByteImageDto.getImages());
+            urls = awsS3Service.uploadImages(auctionByteImageDto.getImages(),folderName);
             System.out.println("urls 첫번째 = " + urls.get(0));
             // 이미지 테이블에 이미지 URL 저장
             imageService.saveAllImages(auctionNonImageDto, urls);
