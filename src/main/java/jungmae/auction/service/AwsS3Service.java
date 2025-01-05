@@ -39,7 +39,7 @@ public class AwsS3Service {
     private String endPoint;
 
 
-    @PostConstruct
+    @PostConstruct  // 의존성 주입 완료 후 자동 실행되도록 설정
     public void init() {
         // AWS S3 클라이언트 초기화
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
