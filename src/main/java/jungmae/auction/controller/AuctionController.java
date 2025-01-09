@@ -11,6 +11,8 @@ import jungmae.auction.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -138,4 +140,12 @@ public class AuctionController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @MessageMapping("/bid")
+    @SendTo("/topic/highestBid")
+    public ResponseEntity<?> updateBid(@PathVariable Long id, @RequestBody BidDto bidDto){
+
+    }
+
+
 }

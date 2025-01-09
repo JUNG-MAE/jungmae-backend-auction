@@ -25,7 +25,7 @@ public class AuctionService {
                 .name(auctionByteImageDto.getName())
                 .description(auctionByteImageDto.getDescription())
                 .quantity(auctionByteImageDto.getQuantity())
-                .startPrice(auctionByteImageDto.getStartPrice())
+                .price(auctionByteImageDto.getStartPrice())
                 .createDate(LocalDateTime.now().toString())
                 .endDate(auctionByteImageDto.getEndDate())
                 .resisteredUserId(auctionByteImageDto.getResisteredUserId())

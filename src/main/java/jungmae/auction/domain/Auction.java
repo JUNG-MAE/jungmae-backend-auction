@@ -26,7 +26,7 @@ public class Auction {
     private String name;
     private String description;
     private long quantity;
-    private String startPrice;
+    private long price;
     private String createDate;
     private String endDate;
     private long resisteredUserId;

@@ -12,7 +12,7 @@ public class AuctionByteImageDto {
     private String name;
     private String description;
     private long quantity;
-    private String startPrice;
+    private long startPrice;
     private String createDate;
     private String endDate;
     private long resisteredUserId;
@@ -26,7 +26,7 @@ public class AuctionByteImageDto {
         this.name = auction.getName();
         this.description = auction.getDescription();
         this.quantity = auction.getQuantity();
-        this.startPrice = auction.getStartPrice();
+        this.startPrice = auction.getPrice();
         this.createDate = auction.getCreateDate();
         this.endDate = auction.getEndDate();
         this.resisteredUserId = auction.getResisteredUserId();
