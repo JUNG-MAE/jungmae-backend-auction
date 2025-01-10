@@ -25,17 +25,20 @@ public class Auction {
     private String title;
     private String name;
     private String description;
-    private long quantity;
-    private long price;
+    private Long quantity;
+    private Long price;
     private String createDate;
     private String endDate;
-    private long resisteredUserId;
-    private long winningUserId;
+    private Long resisteredUserId;
+    private Long winningUserId;
     private String winningUserComment;
     private String closedAuction;
 
     @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bid> bids;
 
     public void updateClosedAuction(String str) {
         closedAuction = str;
