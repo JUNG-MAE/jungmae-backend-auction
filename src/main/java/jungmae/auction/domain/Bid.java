@@ -23,7 +23,7 @@ public class Bid {
     private String comment;
     private Timestamp createDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_id")    // 외래키 이름 설정.
     private Auction auction;
 }

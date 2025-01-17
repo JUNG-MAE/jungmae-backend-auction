@@ -1,6 +1,7 @@
 package jungmae.auction.domain;
 
 import jakarta.persistence.*;
+import jungmae.auction.domain.dto.BidDto;
 import jungmae.auction.domain.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="auction")
 public class Auction {
 
     @Id
@@ -34,13 +36,19 @@ public class Auction {
     private String winningUserComment;
     private String closedAuction;
 
-    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "auction")
     private List<Image> images;
 
-    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "auction")
     private List<Bid> bids;
 
     public void updateClosedAuction(String str) {
         closedAuction = str;
+        endDate = LocalDateTime.now().toString();
+    }
+    public void updateWinningAuction(BidDto bidDto) {
+        price = bidDto.getBidPrice();
+        winningUserId = bidDto.getBidUserId();
+        winningUserComment = bidDto.getComment();
     }
 }
