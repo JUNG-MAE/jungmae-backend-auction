@@ -5,12 +5,20 @@ package jungmae.auction.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jungmae.auction.domain.Auction;
 import jungmae.auction.domain.dto.*;
+import jungmae.auction.exception.SpecificException;
 import jungmae.auction.service.AuctionService;
 import jungmae.auction.service.AwsS3Service;
 import jungmae.auction.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,6 +36,9 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final AwsS3Service awsS3Service;
     private final ImageService imageService;
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuctionController.class);
 
     // 이미지 저장 경로를 사용해 image를 byte[]로 변환
     // 백엔드 서버에서 image를 byte화 하여 테스트 하기위해 구현.
@@ -53,7 +64,7 @@ public class AuctionController {
 
     // 경매 등록 및 경매 물품 사진 NCP에 업로드 후 저장 URL을 Image 디비에 저장
     // byte화 된 이미지 데이터가 Dto에 함께 들어온다.
-    @PostMapping("/auction")
+    @PostMapping("/auctions")
     public ResponseEntity<?> createAuction(@RequestBody AuctionByteImageDto auctionByteImageDto) {
         System.out.println("경매 생성 컨트롤러 진입");
         List<String> urls = new ArrayList<>();
@@ -85,7 +96,7 @@ public class AuctionController {
     }
 
     // id로 경매 조회
-    @GetMapping("/auction/{id}")
+    @GetMapping("/auctions/{id}")
     public ResponseEntity<?> findAuction(@PathVariable Long id) {
 
         System.out.println(id + " 번 경매의 자세한 데이터를 얻기위한 호출");
@@ -103,7 +114,7 @@ public class AuctionController {
     // -> 프론트 측에서 타이머를 통해 시간이 되면 신호를 주기로 합의함.
 
     // 경매 시간 마감 -> Auction 필드 closedAuction을 YES로 변경.
-    @PatchMapping("/auction/close/{id}")
+    @PatchMapping("/auctions/close/{id}")
     public ResponseEntity<?> closeAuction(@PathVariable Long id) {
 
         try {
@@ -116,7 +127,7 @@ public class AuctionController {
     }
 
     // 진행중인 경매 리스트 조회
-    @GetMapping("/auction/list/open")
+    @GetMapping("/auctions/list/open")
     public ResponseEntity<?> findAllOpenAuction() {
         try {
             List<AuctionListDto> auctions = auctionService.findAllOpenAuctions();
@@ -128,7 +139,7 @@ public class AuctionController {
     }
 
     // 종료된 경매 리스트 조회
-    @GetMapping("/auction/list/closed")
+    @GetMapping("/auctions/list/closed")
     public ResponseEntity<?> findAllClosedAuction() {
         try {
             List<AuctionListDto> auctions = auctionService.findAllClosedAuctions();
@@ -136,6 +147,32 @@ public class AuctionController {
         } catch (Exception e) {
             System.out.println("경매 리스트 조회 오류");
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @MessageMapping("/bid/{id}")    // 클라이언트가 /app/bid/{id} 로 보낸 메시지 처리
+    public void updateBid(@DestinationVariable Long id, @Payload BidDto bidDto){
+        try {
+            System.out.println("입찰 진입.");
+            System.out.println("id = " + id);
+            System.out.println(bidDto);
+            AuctionDetailDto auctionDetailDto = auctionService.findAuction(id);
+            System.out.println("경매 조회 성공.");
+            if (bidDto.getBidPrice() <= auctionDetailDto.getPrice()) {
+                throw new SpecificException("입찰 금액은 현재가 보다 높아야 합니다.");
+            }
+            System.out.println("입찰 금액 합격.");
+            // 경매 가격 업데이트
+            AuctionDetailDto updatedAuctionDetailDto = auctionService.bidUpdateAuctions(id,bidDto);
+            logger.info("경매 입찰 성공: {}", updatedAuctionDetailDto);
+
+            // /topic/auction/{id} 를 구독하는 클라이언트들에게 해당 메시지를 보낸다.
+            messagingTemplate.convertAndSend("/topic/auction/" + id, updatedAuctionDetailDto);
+        } catch (SpecificException e) {
+            logger.info("경매 입찰 오류: {}", e.getMessage());
+//            messagingTemplate.convertAndSend("/topic/auction" + id+"/errors", e.getMessage());
+        } catch (Exception e) {
+            logger.info("알 수 없는 오류 발생: {}", e.getMessage());
         }
     }
 }

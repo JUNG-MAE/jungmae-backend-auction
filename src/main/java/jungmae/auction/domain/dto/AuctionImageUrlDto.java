@@ -14,12 +14,12 @@ public class AuctionImageUrlDto {
     private String title;
     private String name;
     private String description;
-    private long quantity;
-    private String startPrice;
+    private Long quantity;
+    private Long price;
     private String createDate;
     private String endDate;
-    private long resisteredUserId;
-    private long winningUserId;
+    private Long resisteredUserId;
+    private Long winningUserId;
     private String winningUserComment;
     private String closedAuction;
     private List<String> images;
@@ -29,7 +29,7 @@ public class AuctionImageUrlDto {
         this.name = auction.getName();
         this.description = auction.getDescription();
         this.quantity = auction.getQuantity();
-        this.startPrice = auction.getStartPrice();
+        this.price = auction.getPrice();
         this.createDate = auction.getCreateDate();
         this.endDate = auction.getEndDate();
         this.resisteredUserId = auction.getResisteredUserId();
@@ -46,7 +46,7 @@ public class AuctionImageUrlDto {
         this.name = auctionNonImageDto.getName();
         this.description = auctionNonImageDto.getDescription();
         this.quantity = auctionNonImageDto.getQuantity();
-        this.startPrice = auctionNonImageDto.getStartPrice();
+        this.price = auctionNonImageDto.getPrice();
         this.createDate = auctionNonImageDto.getCreateDate();
         this.endDate = auctionNonImageDto.getEndDate();
         this.resisteredUserId = auctionNonImageDto.getResisteredUserId();

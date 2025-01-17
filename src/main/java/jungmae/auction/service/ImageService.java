@@ -1,5 +1,6 @@
 package jungmae.auction.service;
 
+import jakarta.transaction.Transactional;
 import jungmae.auction.domain.Auction;
 import jungmae.auction.domain.Image;
 import jungmae.auction.domain.dto.AuctionByteImageDto;
@@ -17,6 +18,7 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
 
+    @Transactional
     public void saveAllImages(AuctionNonImageDto auctionNonImageDto, List<String> images) {
 
         for (String img : images) {

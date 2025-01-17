@@ -6,24 +6,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Image {
+public class Bid {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 생성 디비에 위임 -> auto increment
     private Long id;
-    private String imageUrl;
+    private Long bidUserId;
+    private Long bidPrice;
+    private String comment;
+    private Timestamp createDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_id")    // 외래키 이름 설정.
     private Auction auction;
-
-    public Image(String imageUrl, Auction auction) {
-        this.imageUrl = imageUrl;
-        this.auction = auction;
-    }
 }
