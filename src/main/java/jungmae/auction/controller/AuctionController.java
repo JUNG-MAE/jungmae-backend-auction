@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
@@ -103,7 +104,10 @@ public class AuctionController {
         try {
             AuctionDetailDto auctionDetailDto = auctionService.findAuction(id);
             return new ResponseEntity<>(auctionDetailDto, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e) {
             System.out.println("id값이 유효하지 않거나 해당 경매 정보가 없습니다.");
             return new ResponseEntity<>("실패!", HttpStatus.UNAUTHORIZED);
         }
