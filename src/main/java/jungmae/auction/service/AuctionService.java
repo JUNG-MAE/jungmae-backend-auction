@@ -36,6 +36,8 @@ public class AuctionService {
 
         Auction savedAuction = auctionRepository.save(auction);
 
+        System.out.println("경매 생성 디비 적용 완료");
+
         return new AuctionNonImageDto(savedAuction);
     }
     @Transactional

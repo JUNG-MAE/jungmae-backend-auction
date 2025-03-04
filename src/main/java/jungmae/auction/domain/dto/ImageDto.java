@@ -11,6 +11,7 @@ public class ImageDto {
     private String imageUrl;
 
     public ImageDto(Image image) {
+        this.id = image.getId();
         this.imageUrl = image.getImageUrl();
     }
 }
