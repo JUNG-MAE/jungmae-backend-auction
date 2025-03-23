@@ -62,6 +62,11 @@ public class AuctionService {
     public List<AuctionListDto> findAllOpenAuctions() {
         List<Auction> auctions = auctionRepository.findByClosedAuction("NO");
 
+        System.out.println("fetch join TEST");
+        for (Auction auction : auctions) {
+            System.out.println("auction.name= "+auction.getName()+ "  images count= " + auction.getImages().size());
+        }
+
         return auctions.stream()
                 .map(AuctionListDto::new)
                 .collect(Collectors.toList());

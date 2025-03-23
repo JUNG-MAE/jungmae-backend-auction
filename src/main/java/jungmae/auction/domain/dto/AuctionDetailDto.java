@@ -25,6 +25,7 @@ public class AuctionDetailDto {
     private List<ImageDto> images;
 
     public AuctionDetailDto(Auction auction) {
+        System.out.println("AuctionDetailDto로 치환하는 메서드 입장.");
         this.id = auction.getId();
         this.title = auction.getTitle();
         this.name = auction.getName();
@@ -41,5 +42,6 @@ public class AuctionDetailDto {
                 .stream()
                 .map(ImageDto::new)
                 .collect(Collectors.toList());
+        System.out.println("auction 조회 이후 추가쿼리로 image 조회.");
     }
 }

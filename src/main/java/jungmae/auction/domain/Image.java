@@ -18,7 +18,7 @@ public class Image {
     private Long id;
     private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "auction_id")    // 외래키 이름 설정.
     private Auction auction;
 
