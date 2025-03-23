@@ -36,10 +36,10 @@ public class Auction {
     private String winningUserComment;
     private String closedAuction;
 
-    @OneToMany(mappedBy = "auction")
+    @OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
     private List<Image> images;
 
-    @OneToMany(mappedBy = "auction")
+    @OneToMany(mappedBy = "auction", fetch = FetchType.LAZY)
     private List<Bid> bids;
 
     public void updateClosedAuction(String str) {

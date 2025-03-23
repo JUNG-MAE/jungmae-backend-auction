@@ -16,9 +16,6 @@ public class AuctionByteImageDto {
     private String createDate;
     private String endDate;
     private Long resisteredUserId;
-    private Long winningUserId;
-    private String winningUserComment;
-    private String closedAuction;
     private byte[][] images;
 
     public AuctionByteImageDto(Auction auction) {
@@ -30,8 +27,5 @@ public class AuctionByteImageDto {
         this.createDate = auction.getCreateDate();
         this.endDate = auction.getEndDate();
         this.resisteredUserId = auction.getResisteredUserId();
-        this.winningUserId = auction.getWinningUserId();
-        this.winningUserComment = auction.getWinningUserComment();
-        this.closedAuction = auction.getClosedAuction();
     }
 }
