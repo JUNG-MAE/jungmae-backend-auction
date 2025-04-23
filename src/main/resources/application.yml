@@ -1,11 +1,20 @@
 server:
-  port: 8080
+  port: 0
   servlet:
     context-path: /
     encoding:
       charset: UTF-8
       enabled: true
       force: true
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
 
 spring:
   datasource:
@@ -40,3 +49,7 @@ cloud:
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
+
+logging:
+  level:
+    jungmae.auction: DEBUG
