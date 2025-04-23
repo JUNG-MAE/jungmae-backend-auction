@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8083
   servlet:
     context-path: /
     encoding:
@@ -7,7 +7,18 @@ server:
       enabled: true
       force: true
 
+eureka:
+#  instance:
+#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
 spring:
+  application:
+    name: auction-api
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${MYSQL_URL}:3306/jungmae-chat
@@ -40,3 +51,7 @@ cloud:
     credentials:
       access-key: ${ACCESS_KEY}
       secret-key: ${SECRET_KEY}
+
+logging:
+  level:
+    jungmae.auction: DEBUG
